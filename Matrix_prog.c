@@ -85,7 +85,7 @@ void *Multiply_element(void* thread_id)
 
 }
 
-void* get_call_back(int variation)
+void *get_call_back(int variation)
 {
     if(variation==By_Row)
     {
