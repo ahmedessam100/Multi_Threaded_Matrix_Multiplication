@@ -17,7 +17,9 @@ int rows_done=0,elements_done=0,task1=0;
 void Matrix_init()
 {
     FILE *f;
+    //Reading The Input File
     f = fopen("Matrix.txt","r");
+    //Scanning rows and columns of Matrix1
     fscanf(f,"%d",&row1);
     fscanf(f,"%d",&col1);
     mat_A = (int**)malloc(row1* sizeof(int*));
@@ -25,17 +27,20 @@ void Matrix_init()
         mat_A[i] = (int*)malloc(col1* sizeof(int));
     }
     int i,j;
+    //Scanning Matrix1
     for(i=0;i<row1;i++)
         for (j=0; j < col1; j++)
         {
             fscanf(f,"%d",&mat_A[i][j]);
         }
+    //Scanning rows and columns of Matrix2
     fscanf(f,"%d",&row2);
     fscanf(f,"%d",&col2);
     mat_B = (int**)malloc(row2* sizeof(int*));
     for (int i = 0; i < row2; ++i) {
         mat_B[i] = (int*)malloc(col2* sizeof(int));
     }
+    //Scanning Matrix2
     for(i=0;i<row2;i++)
         for (j=0; j < col2; j++)
         {
@@ -54,8 +59,6 @@ void Matrix_init()
 
 void *Multiply_row(void* thread_id)
 {
-    /*Critical Section for the threads*/
-    pthread_mutex_lock(&mutex1);
     int task = rows_done++,i,j,k;
     for(i=task;i<(task+1);i++)
         for(j=0;j<col2;j++) {
@@ -63,7 +66,6 @@ void *Multiply_row(void* thread_id)
                 mat_C1[i][j] += mat_A[i][k] * mat_B[k][j];
             }
         }
-    pthread_mutex_unlock(&mutex1);
 }
 
 void *Multiply_element(void* thread_id)
