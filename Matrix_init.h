@@ -9,7 +9,7 @@ typedef enum variation{By_Row, By_Element}variation;
 
 
 void Matrix_init();
-void* get_call_back(int variation);
+void *get_call_back(int variation);
 void *Multiply_row(void* thread_id);
 void *Multiply_element(void* thread_id);
 #endif //LAB2_OS2_MATRIX_INIT_H
