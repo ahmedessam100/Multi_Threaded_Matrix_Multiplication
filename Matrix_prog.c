@@ -9,6 +9,7 @@
 
 
 pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t mutex2 = PTHREAD_MUTEX_INITIALIZER;
 int **mat_A,**mat_B,**mat_C1,**mat_C2;
 int row1,col1,row2,col2;
 int rows_done=0,elements_done=0,task1=0;
@@ -59,8 +60,10 @@ void Matrix_init()
 
 void *Multiply_row(void* thread_id)
 {
+    /*Critical Section for the threads*/
+    pthread_mutex_lock(&mutex1);
     int task = rows_done++,i,j,k;
-    for(i=task;i<(task+1);i++)
+    pthread_mutex_unlock(&mutex1);    for(i=task;i<(task+1);i++)
         for(j=0;j<col2;j++) {
             for (k = 0; k < row2; k++) {
                 mat_C1[i][j] += mat_A[i][k] * mat_B[k][j];
@@ -71,11 +74,13 @@ void *Multiply_row(void* thread_id)
 void *Multiply_element(void* thread_id)
 {
     int i,j,k;
+    pthread_mutex_lock(&mutex2);
     if(elements_done==col2)
     {
         task1+=1;
         elements_done=0;
     }
+    pthread_mutex_unlock(&mutex2);
     for(i=task1;i<(task1+1);i++)
         for(j=elements_done;j<(elements_done+1);j++)
             for(k=0;k<row2;k++) {
